@@ -9,5 +9,6 @@ namespace breadPractice.Services.Interfaces
         Task<ApiResponse> CreateAsync(CategoriesParameter request);
         Task<Categories> GetByIdAsync(int id);
         Task<ApiResponse> UpdateAsync(int id, CategoriesParameter parameter);
+        Task<ApiResponse> DeleteAsync(int id);
     }
 }

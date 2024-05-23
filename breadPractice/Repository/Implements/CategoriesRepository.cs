@@ -57,6 +57,16 @@ namespace breadPractice.Repository.Implements
             }
         }
 
+        public async Task<bool> DeleteAsync(int id) 
+        {
+            var sql = "DELETE FROM Category WHERE CategoryID = @Id";
+            using (var conn = new SqlConnection(_connectString))
+            {
+                var rowsAffected = await conn.ExecuteAsync(sql, new { Id = id });
+                return rowsAffected > 0;
+            }
+        }
+
 
         /// <summary>
         /// 查詢類別

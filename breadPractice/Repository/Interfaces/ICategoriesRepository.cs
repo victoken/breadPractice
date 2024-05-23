@@ -31,7 +31,9 @@ namespace breadPractice.Repository
         /// <param name="id">類別ID</param>
         /// <param name="parameter">參數</param>
         /// <returns>是否成功</returns>
-       Task<bool> UpdateAsync(Categories entity);
-        
+        Task<bool> UpdateAsync(Categories entity);
+
+        Task<bool> DeleteAsync(int id);
+
     }
 }

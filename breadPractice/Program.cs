@@ -17,7 +17,10 @@ builder.Services.AddAutoMapper(typeof(ServiceMappings));
 builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 var NorthwindConnecstring = builder.Configuration.GetConnectionString("Northwind");
-
+builder.Services.AddMvc(options =>
+{
+    options.SuppressAsyncSuffixInActionNames = false;
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

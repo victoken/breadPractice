@@ -1,14 +1,16 @@
 ﻿using breadPractice.Models;
 using breadPractice.Parameter;
+using breadPractice.Repository.Implements;
 using breadPractice.Services.Implements;
 using breadPractice.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace breadPractice.Controllers
 {
 
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoriesService _categoriesService;
@@ -27,14 +29,13 @@ namespace breadPractice.Controllers
         }
 
         [HttpPost]
+        [ActionName(nameof(CreateAsync))]
         public async Task<IActionResult> CreateAsync([FromBody] CategoriesParameter parameter)
         {
             var response = await _categoriesService.CreateAsync(parameter);
             if (response.ResponseCode == ResponseCode.OK)
             {
-                // 手動構建 URL 路徑
-                var url = Url.Action("GetByIdAsync", "Categories", new { id = response.Data });
-                return Created(url, response);
+                return CreatedAtAction(nameof(GetByIdAsync), new { CategoryID = response.Data });
             }
             else
             {
@@ -42,7 +43,8 @@ namespace breadPractice.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync(int CategoryID)
         {
             var category = await _categoriesService.GetByIdAsync(CategoryID);
@@ -57,6 +59,20 @@ namespace breadPractice.Controllers
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] CategoriesParameter parameter)
         {
             var response = await _categoriesService.UpdateAsync(id, parameter);
+            if (response.ResponseCode == ResponseCode.OK)
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var response = await _categoriesService.DeleteAsync(id);
             if (response.ResponseCode == ResponseCode.OK)
             {
                 return Ok(response);

@@ -64,6 +64,25 @@ namespace breadPractice.Services.Implements
                 return new ApiResponse(null, ResponseCode.BadRequest, "修改種類失敗");
             }
         }
+
+        public async Task<ApiResponse> DeleteAsync(int id) 
+        {
+            var entity = await _categoriesRepository.GetAsync(id);
+            if (entity == null)
+            {
+                return new ApiResponse(null, ResponseCode.BadRequest, "找不到要刪除的資料");
+            }
+
+            var isDeleted = await _categoriesRepository.DeleteAsync(id);
+            if (isDeleted)
+            {
+                return new ApiResponse(null, ResponseCode.OK, "刪除種類成功");
+            }
+            else
+            {
+                return new ApiResponse(null, ResponseCode.BadRequest, "刪除種類失敗");
+            }
+        }
     }
 
 
