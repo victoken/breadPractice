@@ -3,6 +3,7 @@ using breadPractice.Models;
 using breadPractice.Repository.Interfaces;
 using Dapper;
 using System.Data;
+using System.Data.Common;
 using static Dapper.SqlMapper;
 
 namespace breadPractice.Repository.Implements
@@ -19,6 +20,25 @@ namespace breadPractice.Repository.Implements
         {
             _dbConnection = dbConnection;
             _janesBakeryConnection = janesBakeryConnection;
+        }
+
+
+        /// <summary>
+        /// 查詢產品列表(改成正確連線方式版)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<Product>> GetListAsync(Product entity)
+        {
+            var sql = "SELECT * FROM Product";
+            var parameters = new DynamicParameters();
+
+            if (!string.IsNullOrEmpty((entity.ProductID).ToString()))
+            {
+                sql += " WHERE ProductID = @ProductID";
+                parameters.Add("@ProductID", entity.ProductID);
+            }
+            var result = await _janesBakeryConnection.dbConnection().QueryAsync<Product>(sql.ToString(), entity);
+            return result;
         }
 
         /// <summary>
@@ -39,25 +59,6 @@ namespace breadPractice.Repository.Implements
         //    var result = await _dbConnection.QueryAsync<Product>(sql.ToString(), entity);
         //    return result;
         //}
-
-        /// <summary>
-        /// 查詢產品列表(改成正確連線方式版)
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<Product>> GetListAsync(Product entity)
-        {
-            var sql = "SELECT * FROM Product";
-            var parameters = new DynamicParameters();
-
-            if (!string.IsNullOrEmpty((entity.ProductID).ToString()))
-            {
-                sql += " WHERE ProductID = @ProductID";
-                parameters.Add("@ProductID", entity.ProductID);
-            }
-            _janesBakeryConnection.Open();
-            var result = await _janesBakeryConnection.QueryAsync<Product>(sql.ToString(), entity);
-            return result;
-        }
 
         /// <summary>
         /// 修改產品

@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 string connectionString = builder.Configuration.GetConnectionString("JansBakery");
 builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
-builder.Services.AddTransient<JanesBakeryConnection>();
+builder.Services.AddScoped<JanesBakeryConnection>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
