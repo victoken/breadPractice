@@ -3,6 +3,7 @@ using breadPractice.Models;
 using breadPractice.Parameter;
 using breadPractice.Repository;
 using breadPractice.Repository.Implements;
+using breadPractice.Repository.Interfaces;
 using breadPractice.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata;

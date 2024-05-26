@@ -29,7 +29,6 @@ namespace breadPractice.Controllers
         }
 
         [HttpPost]
-        [ActionName(nameof(CreateAsync))]
         public async Task<IActionResult> CreateAsync([FromBody] CategoriesParameter parameter)
         {
             var response = await _categoriesService.CreateAsync(parameter);
@@ -44,7 +43,6 @@ namespace breadPractice.Controllers
         }
 
         [HttpGet]
-        [ActionName(nameof(GetByIdAsync))]
         public async Task<IActionResult> GetByIdAsync(int CategoryID)
         {
             var category = await _categoriesService.GetByIdAsync(CategoryID);

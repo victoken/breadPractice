@@ -2,7 +2,7 @@
 using breadPractice.Parameter;
 using System.Collections.Generic;
 
-namespace breadPractice.Repository
+namespace breadPractice.Repository.Interfaces
 {
     public interface ICategoriesRepository
     {
@@ -34,6 +34,5 @@ namespace breadPractice.Repository
         Task<bool> UpdateAsync(Categories entity);
 
         Task<bool> DeleteAsync(int id);
-
     }
 }

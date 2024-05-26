@@ -1,9 +1,11 @@
 ﻿using breadPractice.Models;
 using breadPractice.Parameter;
+using breadPractice.Repository.Interfaces;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Dapper.SqlMapper;
 
 namespace breadPractice.Repository.Implements
 {
@@ -13,7 +15,11 @@ namespace breadPractice.Repository.Implements
         /// 連線字串
         /// </summary>
         private readonly string _connectString = "Server=.;TrustServerCertificate=True;Initial Catalog=JanesBakery;Integrated Security=True;";
-
+        private readonly IDbConnection _dbConnection;
+        public CategoriesRepository(IDbConnection dbConnection)
+        {
+            _dbConnection = dbConnection;
+        }
         /// <summary>
         /// 查詢類別列表
         /// </summary>
@@ -37,9 +43,11 @@ namespace breadPractice.Repository.Implements
 
             using (var conn = new SqlConnection(_connectString))
             {
-                var result = await conn.QueryAsync<Categories>(sql.ToString(), entity);
+                var result = await conn.QueryAsync<Categories>(sql.ToString(),entity);
                 return result;
             }
+            //var result = await _dbConnection.QueryAsync<Categories>(sql.ToString(), entity);
+            //return result;
         }
 
         /// <summary>
@@ -57,7 +65,7 @@ namespace breadPractice.Repository.Implements
             }
         }
 
-        public async Task<bool> DeleteAsync(int id) 
+        public async Task<bool> DeleteAsync(int id)
         {
             var sql = "DELETE FROM Category WHERE CategoryID = @Id";
             using (var conn = new SqlConnection(_connectString))
@@ -82,7 +90,7 @@ namespace breadPractice.Repository.Implements
             ";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Id", id, System.Data.DbType.Int32);
+            parameters.Add("Id", id, DbType.Int32);
 
             using (var conn = new SqlConnection(_connectString))
             {
@@ -139,7 +147,7 @@ namespace breadPractice.Repository.Implements
             ";
 
             var parameters = new DynamicParameters(parameter);
-            parameters.Add("CategoryID", id, System.Data.DbType.Int32);
+            parameters.Add("CategoryID", id, DbType.Int32);
 
             using (var conn = new SqlConnection(_connectString))
             {
@@ -162,7 +170,7 @@ namespace breadPractice.Repository.Implements
             ";
 
             var parameters = new DynamicParameters();
-            parameters.Add("CategoryID", id, System.Data.DbType.Int32);
+            parameters.Add("CategoryID", id, DbType.Int32);
 
             using (var conn = new SqlConnection(_connectString))
             {

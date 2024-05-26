@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using breadPractice.DTO;
 using breadPractice.Models;
 using breadPractice.Parameter;
 
@@ -9,6 +10,7 @@ namespace breadPractice.Mapping
         public ServiceMappings()
         {
             CreateMap<CategoriesParameter, Categories>();
+            CreateMap<ProductDTO, Product>();
         }
     }
 }
