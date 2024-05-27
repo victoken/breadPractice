@@ -3,7 +3,6 @@ using breadPractice.Models;
 using breadPractice.Repository.Interfaces;
 using Dapper;
 using System.Data;
-using System.Data.Common;
 using static Dapper.SqlMapper;
 
 namespace breadPractice.Repository.Implements
@@ -22,23 +21,26 @@ namespace breadPractice.Repository.Implements
             _janesBakeryConnection = janesBakeryConnection;
         }
 
-
         /// <summary>
         /// 查詢產品列表(改成正確連線方式版)
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<Product>> GetListAsync(Product entity)
+        public async Task<IEnumerable<Product>> GetListAsync(Product? entity)
         {
             var sql = "SELECT * FROM Product";
-            var parameters = new DynamicParameters();
 
             if (!string.IsNullOrEmpty((entity.ProductID).ToString()))
             {
-                sql += " WHERE ProductID = @ProductID";
-                parameters.Add("@ProductID", entity.ProductID);
+                using (var conn = _janesBakeryConnection.dbConnection())
+                {
+                    var result = await conn.QueryAsync<Product>(sql.ToString(), entity);
+                    return result;
+                }
             }
-            var result = await _janesBakeryConnection.dbConnection().QueryAsync<Product>(sql.ToString(), entity);
-            return result;
+            else
+            {
+                return Enumerable.Empty<Product>();
+            }
         }
 
         /// <summary>
@@ -71,16 +73,23 @@ namespace breadPractice.Repository.Implements
                       "OriginalPrice = @OriginalPrice, Price = @Price, StartDate = @StartDate, EndDate = @EndDate, IsAvailable = @IsAvailable " +
                       "WHERE ProductID = @ProductID";
 
-            var rowsAffected = await _dbConnection.ExecuteAsync(sql, entity);
-            return rowsAffected > 0;
+            using (var conn = _janesBakeryConnection.dbConnection())
+            {
+                var rowsAffected = await _dbConnection.ExecuteAsync(sql, entity);
+                return rowsAffected > 0;
+            }
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
             var sql = "DELETE FROM Product WHERE ProductID = @ProductID";
-
-            var rowsAffected = await _dbConnection.ExecuteAsync(sql, new { ProductID = id });
-            return rowsAffected > 0;
+            var dto = new DynamicParameters();
+            dto.Add("ProductID", id, DbType.Int32);
+            using (var conn = _janesBakeryConnection.dbConnection())
+            {
+                var rowsAffected = await _dbConnection.ExecuteAsync(sql, dto);
+                return rowsAffected > 0;
+            }
         }
 
         /// <summary>
@@ -90,7 +99,14 @@ namespace breadPractice.Repository.Implements
         public async Task<Product> GetAsync(int id)
         {
             var sql = "SELECT * FROM Product WHERE ProductID = @ProductID";
-            return await _dbConnection.QueryFirstOrDefaultAsync<Product>(sql, new { ProductID = id });
+
+            var parameters = new DynamicParameters();
+            parameters.Add("Id", id, DbType.Int32);
+            using (var conn = _janesBakeryConnection.dbConnection())
+            {
+                var result = await _dbConnection.QueryFirstOrDefaultAsync<Product>(sql, new { ProductID = id });
+                return result;
+            }
         }
 
         /// <summary>
@@ -104,7 +120,10 @@ namespace breadPractice.Repository.Implements
                       "VALUES (@ProductName, @CategoryID, @ProductUnit, @ProductDescription, @OriginalPrice, @Price, @StartDate, @EndDate, @IsAvailable); " +
                       "SELECT SCOPE_IDENTITY();";
 
-            return await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, entity);
+            using (var conn = _janesBakeryConnection.dbConnection())
+            {
+                return await _dbConnection.QueryFirstOrDefaultAsync<int>(sql, entity);
+            }
         }
     }
 }
