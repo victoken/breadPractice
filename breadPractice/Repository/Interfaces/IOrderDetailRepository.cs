@@ -2,37 +2,37 @@
 
 namespace breadPractice.Repository.Interfaces
 {
-    public interface IProductRepository
+    public interface IOrderDetailRepository
     {
         /// <summary>
         /// 查詢產品列表
         /// </summary>
-        /// <returns>產品列表</returns>
-        Task<IEnumerable<Product>> GetListAsync(Product entity);
+        /// <returns>訂單列表</returns>
+        Task<IEnumerable<OrderDetail>> GetListAsync(OrderDetail entity);
 
         /// <summary>
-        /// 查詢產品
+        /// 查詢訂單
         /// </summary>
-        /// <param name="id">產品ID</param>
+        /// <param name="id">訂單ID</param>
         /// <returns>產品</returns>
-        Task<Product> GetAsync(int id);
+        Task<OrderDetail> GetAsync(int id);
         /// <summary>
-        /// 新增產品
+        /// 新增訂單
         /// </summary>
         /// <param name="entity">參數</param>
         /// <returns>新增產品的ID</returns>
-        Task<int> CreateAsync(Product entity);
+        Task<int> CreateAsync(OrderDetail entity);
 
         /// <summary>
-        /// 修改產品
+        /// 修改訂單
         /// </summary>
-        /// <param name="id">產品ID</param>
+        /// <param name="id">訂單ID</param>
         /// <param name="entity">參數</param>
         /// <returns>是否成功</returns>
-        Task<bool> UpdateAsync(Product entity);
+        Task<bool> UpdateAsync(OrderDetail entity);
 
         /// <summary>
-        /// 刪除產品 
+        /// 刪除訂單 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

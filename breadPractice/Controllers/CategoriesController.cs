@@ -1,7 +1,5 @@
 ﻿using breadPractice.Models;
 using breadPractice.Parameter;
-using breadPractice.Repository.Implements;
-using breadPractice.Services.Implements;
 using breadPractice.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
