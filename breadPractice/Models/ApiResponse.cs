@@ -4,7 +4,8 @@
     {
         OK = 200,
         BadRequest = 400,
-        MethodNotAllowed = 405
+        MethodNotAllowed = 405,
+        InternalServerError = 406
     }
     public class ApiResponse
     {

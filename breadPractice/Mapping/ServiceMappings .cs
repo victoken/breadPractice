@@ -11,6 +11,7 @@ namespace breadPractice.Mapping
         {
             CreateMap<CategoriesParameter, Categories>();
             CreateMap<ProductDTO, Product>();
+            CreateMap<OrderDetailDTO, OrderDetail>();
         }
     }
 }
